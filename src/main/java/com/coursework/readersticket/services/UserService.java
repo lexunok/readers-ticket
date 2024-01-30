@@ -4,9 +4,11 @@ package com.coursework.readersticket.services;
 import com.coursework.readersticket.models.dto.UserDTO;
 import com.coursework.readersticket.models.entity.User;
 import com.coursework.readersticket.repositories.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+    @Value("${admin.username}")
+    String adminUsername;
+    @Value("${admin.password}")
+    String adminPassword;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper mapper = new ModelMapper();
@@ -49,7 +55,13 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
     }
-
+    @PostConstruct
+    private void registerAdminOnInit() {
+        if (!repository.existsByUsername(adminUsername)) {
+            repository.save(new User(adminUsername,
+                    passwordEncoder.encode(adminPassword), User.Role.ADMIN));
+        }
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username);
