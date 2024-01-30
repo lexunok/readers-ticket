@@ -3,6 +3,7 @@ package com.coursework.readersticket.controllers;
 import com.coursework.readersticket.models.dto.BookDTO;
 import com.coursework.readersticket.services.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/admin/book")
