@@ -3,9 +3,38 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 const routes = [
     {
       path: '/',
-      name: 'Добро пожаловать!',
-      component: () => import( '../views/Start.vue'),
-    }
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      name: 'Вход',
+      component: () => import( '../views/Login.vue'),
+    },
+    {
+      path: '/register',
+      name: 'Регистрация',
+      component: () => import( '../views/Registration.vue'),
+    },
+    {
+      path: '/admin/',
+      children: [
+          {
+              path: '',
+              name: 'Админ панель',
+              component: () => import('../views/Admin/Admin.vue')
+          },
+          {
+              path: 'users',
+              name: 'Список пользователей',
+              component: () => import('../views/Admin/Users.vue')
+          },
+          {
+            path: 'library',
+            name: 'Список литературы',
+            component: () => import('../views/Admin/Library.vue')
+        },
+      ],
+  },
 ]
 
 const router = createRouter({

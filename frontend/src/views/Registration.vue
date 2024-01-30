@@ -1,5 +1,5 @@
 <template>
-    <div>йоу</div>
+    <div>Окно регистрации</div>
 </template>
 <script>
 export default{
