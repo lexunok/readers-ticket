@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +55,12 @@ public class UserService implements UserDetailsService {
         User user = mapper.map(userDTO, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
+    }
+    public List<UserDTO> getAllUsers() {
+        return repository.findAll().stream().map(u -> mapper.map(u, UserDTO.class)).toList();
+    }
+    public void deleteUser(Long id) {
+        repository.deleteById(id);
     }
     @PostConstruct
     private void registerAdminOnInit() {

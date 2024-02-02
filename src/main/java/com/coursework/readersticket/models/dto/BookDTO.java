@@ -1,10 +1,12 @@
 package com.coursework.readersticket.models.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class BookDTO {
     private Long id;
     private String name;
