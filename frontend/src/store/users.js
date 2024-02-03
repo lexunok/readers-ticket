@@ -2,17 +2,17 @@ import {http} from "../plugins/axios";
 
 export default {
     actions: {
-        async setUserInUser({commit}){
-            const response = await http.get("/api/v1/book/all")
-            commit('setBook',response.data)
+        async userLogin({commit}, {username, password}){
+            const response = await http.post("/api/v1/auth/login", {username, password})
+            commit('setUser',response.data)
         },
         async setUsersInList({commit}){
             const response = await http.get("/api/v1/admin/user/all")
-            commit('setBook',response.data)
+            commit('setUsers',response.data)
         },
         async addUser({commit}, {username, firstName, lastName, role, password}){
             const response = await http.post("/api/v1/admin/user/register",{username, firstName, lastName, role, password})
-            commit('updateBooks',response.data)
+            commit('updateUser',response.data)
         },
         async deleteUserInList({ commit }, id) {
             const response = await http.delete("/api/v1/admin/user/delete/" + id)
@@ -20,8 +20,8 @@ export default {
         }
     },
     mutations: {
-        setUser(state, user) {
-            state.user = user
+        setUser(state, token) {
+            state.token = token
         },
         setUsers(state, users) {
             state.users = users
@@ -34,15 +34,15 @@ export default {
         },
     },
     state: {
-        user: null,
+        token: null,
         users: []
     },
     getters: {
         getUsers(state){
             return state.users
         },
-        getUser(state){
-            return state.user
+        getToken(state){
+            return state.token
         }
     }
 }
