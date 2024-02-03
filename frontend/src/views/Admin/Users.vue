@@ -12,7 +12,7 @@
     </transition>
 </template>
 <script>
-    import AdminNav from "../../components/AdminNav.vue"
+    import AdminNav from "../../components/Navigation/AdminNav.vue"
     import UsersList from "../../components/Users/UsersList.vue"
     import UsersModal from "../../components/Users/UsersModal.vue"
     export default{

@@ -34,7 +34,27 @@ const routes = [
             component: () => import('../views/Admin/Library.vue')
         },
       ],
-  },
+    },
+    {
+      path: '/library/',
+      children: [
+          {
+              path: '',
+              name: 'Главная',
+              component: () => import('../views/Library/Main.vue')
+          },
+          {
+              path: 'user',
+              name: 'Профиль',
+              component: () => import('../views/Library/Profile.vue')
+          },
+          {
+            path: 'books',
+            name: 'Библиотека',
+            component: () => import('../views/Library/Library.vue')
+        },
+      ],
+    }
 ]
 
 const router = createRouter({
