@@ -69,25 +69,27 @@
             </div>
             <div v-if="admin" class="w-full">
                 <div v-if="redactorActive" class="w-full flex gap-2">
-                    <button type="button" @click="fCloseRedactorAndSafe" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить изменения</button>
-                    <button type="button" @click="fCloseRedactor" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg">Закрыть редактор</button>
+                    <button v-if="newBookBool" type="button" @click="fAddBook" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить книгу</button>
+                    <button v-else type="button" @click="fCloseRedactorAndSafe" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить изменения</button>
+                    <button v-if="newBookBool" type="button" @click="fCloseModal" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Закрыть редактор</button>
+                    <button v-else type="button" @click="fCloseRedactor" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Закрыть редактор</button>
                 </div>
                 <div v-else class="w-full flex gap-2">
                     <button type="button" @click="fOpenRedactor" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Редактировать книгу</button>
-                    <button type="button" @click="fDeleteBook(activeBook.id)" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg">Удалить книгу</button>
+                    <button type="button" @click="fDeleteBook(activeBook.id)" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Удалить книгу</button>
                 </div>
             </div>
             <div v-else class="w-full">
                 <button type="button" v-if="isBookInList(activeBook)" @click="fReturnUsersBook(activeBook.id)" 
                 class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Убрать книгу из читательского билета</button>
-                <button type="button" v-else @click="fAddUsersBook" 
+                <button type="button" v-else @click="fAddUsersBook(activeBook.id)" 
                 class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Добавить книгу в читательский билет</button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import TitleInput from "../../components/TitleInput.vue"
 import BookRedactorRight from "../Library/BookRedactorRight.vue"
 import GenresAuthors from "../Library/GenresAuthors.vue"
@@ -96,15 +98,23 @@ export default {
         TitleInput, BookRedactorRight, GenresAuthors
     },
     props: ['admin', 'closeModal', 'openRedactor', 'closeRedactor', 'closeRedactorAndSafe', 'deleteBook', 
-            'setData', 'newBook', 'activeBook', 'redactorActive', 'addUsersBook', 'returnUsersBook'],
+            'setData', 'newBook', 'activeBook', 'redactorActive', 'addUsersBook', 'returnUsersBook', 'bookAdder', 'newBookBool'],
     data(){
         return{
-            genres: this.activeBook.genres.join(' '),
-            authors: this.activeBook.authors.join(' '),
+            genres: null,
+            authors: null,
         }
     },
     mounted() {
         document.addEventListener('keyup', this.escFunction);
+        if (Array.isArray(this.activeBook.genres))
+        {
+            this.genres = this.activeBook.genres.join(' ');
+        }
+        if (Array.isArray(this.activeBook.authors))
+        {
+            this.genres = this.activeBook.authors.join(' ');
+        }
     },
     beforeDestroy() {
         document.removeEventListener('keyup', this.escFunction);
@@ -113,6 +123,8 @@ export default {
         ...mapGetters(['getUsersBooks'])
     },
     methods: {
+        ...mapActions(['addBook', 'updateBook', 'deleteBookInList', 'setBookInList', 
+                        'addUsersBook', 'returnUsersBookInList', 'setUsersBookInList']),
         escFunction(event) {
             if(event.keyCode === 27) {
                 this.closeModal();
@@ -133,11 +145,23 @@ export default {
         fCloseRedactor(){
             this.closeRedactor();
         },
-        fCloseRedactorAndSafe(){
+        async fCloseRedactorAndSafe(){
+            await this.updateBook(this.newBook.id, {name: this.newBook.name, description: this.newBook.name, publisher: this.newBook.name, 
+                    yearOfPublishing: this.newBook.name, genres: this.newBook.name, authors: this.newBook.name, 
+                    isbn: this.newBook.name, countOfPages: this.newBook.name})
             this.closeRedactorAndSafe();
         },
-        fDeleteBook(id){
+        async fDeleteBook(id){
+            await this.deleteBookInList(id)
+            await this.setBookInList()
             this.deleteBook(id);
+        },
+        async fAddBook(){
+            await this.addBook({name: this.newBook.name, description: this.newBook.name, publisher: this.newBook.name, 
+                    yearOfPublishing: this.newBook.name, genres: this.newBook.name, authors: this.newBook.name, 
+                    isbn: this.newBook.name, countOfPages: this.newBook.name})
+            await this.setBookInList()
+            this.bookAdder();
         },
         fSetData(property, data){
             this.setData(property, data);
@@ -147,11 +171,13 @@ export default {
                 return userBook.book.id === bookToFind.id && userBook.isRent === true;
             });
         },
-        fAddUsersBook(){
-            this.addUsersBook();
+        async fAddUsersBook(id){
+            await this.addUsersBook(id)
+            await this.setUsersBookInList()
         },
-        fReturnUsersBook(id){
-            this.returnUsersBook(id);
+        async fReturnUsersBook(id){
+            await this.returnUsersBookInList(id)
+            await this.setUsersBookInList()
         }
     }
 }

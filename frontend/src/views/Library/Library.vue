@@ -6,8 +6,7 @@
         </transition>
     </div>
     <transition name="modal" enter-active-class="enter-active" leave-active-class="leave-active">
-        <LibraryModal v-if="showModal" :activeBook="activeBook" :closeModal="closeModal"
-                      :addUsersBook="addUsersBook" :returnUsersBook="returnUsersBook" />
+        <LibraryModal v-if="showModal" :activeBook="activeBook" :closeModal="closeModal" />
     </transition>
 </template>
 <script>
@@ -41,15 +40,7 @@ export default{
         closeModal() {
             this.activeBook = null;
             this.showModal = false;
-        },
-        async addUsersBook(){
-            await this.addUsersBook({userId: this.user.id, book: this.activeBook, isRent: true, rentedAt: getDate, returnedAt: null})
-            await this.setUsersBookInList()
-        },
-        async returnUsersBook(id){
-            await this.returnUsersBookInList(id)
-            await this.setUsersBookInList()
-        },
+        }
     }
 }
 </script>

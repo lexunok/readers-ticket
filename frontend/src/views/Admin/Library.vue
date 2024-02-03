@@ -7,8 +7,8 @@
     </div>
     <transition name="modal" enter-active-class="enter-active" leave-active-class="leave-active">
         <LibraryModal v-if="showModal" :admin="true" :newBook="newBook" :activeBook="activeBook" :redactorActive="redactorActive"
-                        :closeModal="closeModal" :openRedactor="openRedactor" :closeRedactor="closeRedactor"
-                        :closeRedactorAndSafe="closeRedactorAndSafe" :deleteBook="deleteBook" :setData="setData" :bookAdder="bookAdder"/>
+                        :closeModal="closeModal" :openRedactor="openRedactor" :closeRedactor="closeRedactor" :newBookBool="newBookBool"
+                        :closeRedactorAndSafe="closeRedactorAndSafe" :deleteBook="deleteBook" :setData="setData" :bookAdder="addBook"/>
     </transition>
 </template>
 <script>
@@ -25,6 +25,7 @@
                 show: false,
                 showModal: false,
                 redactorActive: false,
+                newBookBool: false,
                 activeBook: { 
                     id: '', 
                     name: '', 
@@ -69,8 +70,8 @@
                     description: '', 
                     publisher: '', 
                     yearOfPublishing: '', 
-                    genres: '', 
-                    authors: '', 
+                    genres: [''], 
+                    authors: [''], 
                     isbn: '', 
                     countOfPages: '' 
                 };
@@ -95,27 +96,19 @@
                 this.redactorActive = false;
             },
             bookAdder(){
+                this.newBookBool = true;
                 this.redactorActive = true;
                 this.showModal = true;
             },
-            async closeRedactorAndSafe(){
-                await this.updateBook({id: this.newBook.id, name: this.newBook.name, description: this.newBook.name, publisher: this.newBook.name, 
-                    yearOfPublishing: this.newBook.name, genres: this.newBook.name, authors: this.newBook.name, 
-                    isbn: this.newBook.name, countOfPages: this.newBook.name})
+            closeRedactorAndSafe(){
                 this.activeBook = Object.assign({}, this.newBook);
                 this.redactorActive = false;
             },
-            async addBook(){
-                await this.addBook({name: this.newBook.name, description: this.newBook.name, publisher: this.newBook.name, 
-                    yearOfPublishing: this.newBook.name, genres: this.newBook.name, authors: this.newBook.name, 
-                    isbn: this.newBook.name, countOfPages: this.newBook.name})
-                await this.setBookInList()
+            addBook(){
                 this.activeBook = Object.assign({}, this.newBook);
                 this.redactorActive = false;
             },
-            async deleteBook(id){
-                await this.deleteBookInList(id)
-                await this.setBookInList()
+            deleteBook(){
                 this.showModal = false;
             },
             setData(property, data){
@@ -123,15 +116,6 @@
             }
         }
     }
-    // private Long id;
-    // private String name;
-    // private String description;
-    // private String publisher;
-    // private String yearOfPublishing;
-    // private List<String> genres;
-    // private List<String> authors;
-    // private String isbn;
-    // private Integer countOfPages;
 </script>
 <style>
 .enter-active {
