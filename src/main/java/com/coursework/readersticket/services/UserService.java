@@ -7,7 +7,6 @@ import com.coursework.readersticket.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,17 +50,25 @@ public class UserService implements UserDetailsService {
                 .build();
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
     public void register(UserDTO userDTO) {
         User user = mapper.map(userDTO, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
     }
+
+    public UserDTO getProfile(String username) {
+        return mapper.map(repository.findByUsername(username), UserDTO.class);
+    }
+
     public List<UserDTO> getAllUsers() {
         return repository.findAll().stream().map(u -> mapper.map(u, UserDTO.class)).toList();
     }
+
     public void deleteUser(Long id) {
         repository.deleteById(id);
     }
+
     @PostConstruct
     private void registerAdminOnInit() {
         if (!repository.existsByUsername(adminUsername)) {
@@ -69,6 +76,7 @@ public class UserService implements UserDetailsService {
                     passwordEncoder.encode(adminPassword), User.Role.ADMIN));
         }
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username);
