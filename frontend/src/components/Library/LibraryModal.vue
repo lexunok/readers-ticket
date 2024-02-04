@@ -98,11 +98,11 @@ export default {
         TitleInput, BookRedactorRight, GenresAuthors
     },
     props: ['admin', 'closeModal', 'openRedactor', 'closeRedactor', 'closeRedactorAndSafe', 'deleteBook', 
-            'setData', 'newBook', 'activeBook', 'redactorActive', 'addUsersBook', 'returnUsersBook', 'bookAdder', 'newBookBool'],
+            'setData', 'newBook', 'activeBook', 'redactorActive', 'returnUsersBook', 'bookAdder', 'newBookBool'],
     data(){
         return{
             genres: null,
-            authors: null,
+            authors: null
         }
     },
     mounted() {
@@ -113,7 +113,7 @@ export default {
         }
         if (Array.isArray(this.activeBook.authors))
         {
-            this.genres = this.activeBook.authors.join(' ');
+            this.authors = this.activeBook.authors.join(' ');
         }
     },
     beforeDestroy() {
@@ -131,10 +131,10 @@ export default {
             }
         },
         convertToAuthors(){
-            this.newBook.genres = this.genres.split(' ');
+            this.newBook.authors = this.authors.split(' ');
         },
         convertToGenres(){
-            this.newBook.authors = this.genres.split(' ');
+            this.newBook.genres = this.genres.split(' ');
         },
         fCloseModal(){
             this.closeModal();
@@ -146,9 +146,9 @@ export default {
             this.closeRedactor();
         },
         async fCloseRedactorAndSafe(){
-            await this.updateBook(this.newBook.id, {name: this.newBook.name, description: this.newBook.name, publisher: this.newBook.name, 
-                    yearOfPublishing: this.newBook.name, genres: this.newBook.name, authors: this.newBook.name, 
-                    isbn: this.newBook.name, countOfPages: this.newBook.name})
+            await this.updateBook({id: this.newBook.id, name: this.newBook.name, description: this.newBook.description, publisher: this.newBook.publisher, 
+                    yearOfPublishing: this.newBook.yearOfPublishing, genres: this.newBook.genres, authors: this.newBook.authors, 
+                    isbn: this.newBook.isbn, countOfPages: this.newBook.countOfPages})
             this.closeRedactorAndSafe();
         },
         async fDeleteBook(id){
@@ -157,9 +157,9 @@ export default {
             this.deleteBook(id);
         },
         async fAddBook(){
-            await this.addBook({name: this.newBook.name, description: this.newBook.name, publisher: this.newBook.name, 
-                    yearOfPublishing: this.newBook.name, genres: this.newBook.name, authors: this.newBook.name, 
-                    isbn: this.newBook.name, countOfPages: this.newBook.name})
+            await this.addBook({name: this.newBook.name, description: this.newBook.description, publisher: this.newBook.publisher, 
+                    yearOfPublishing: this.newBook.yearOfPublishing, genres: this.newBook.genres, authors: this.newBook.authors, 
+                    isbn: this.newBook.isbn, countOfPages: this.newBook.countOfPages})
             await this.setBookInList()
             this.bookAdder();
         },

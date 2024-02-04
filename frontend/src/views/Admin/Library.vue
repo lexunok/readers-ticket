@@ -52,6 +52,7 @@
         },
         mounted() {
             this.show = true;
+            this.setBookInList();
         },
         computed: {
             ...mapGetters(['getBooks'])

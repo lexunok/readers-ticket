@@ -12,7 +12,7 @@
     </transition>
 </template>
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import AdminNav from "../../components/Navigation/AdminNav.vue"
     import UsersList from "../../components/Users/UsersList.vue"
     import UsersModal from "../../components/Users/UsersModal.vue"
@@ -46,11 +46,13 @@
         },
         mounted() {
             this.show = true;
+            this.setUsersInList()
         },
         computed: {
             ...mapGetters(['getUsers'])
         },
         methods:{
+            ...mapActions(['setUsersInList']),
             openModal(user) {
                 this.activeUser = user;
                 this.showModal = true;

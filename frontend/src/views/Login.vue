@@ -15,7 +15,7 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Title from "../components/Title.vue"
 export default{
     components: {
@@ -27,11 +27,20 @@ export default{
             password: null
         }
     },
+    computed: {
+        ...mapGetters(['getUser'])
+    },
     methods: {
-        ...mapActions(['userLogin']),
+        ...mapActions(['userLogin','setUserInUser']),
         async login(){
             await this.userLogin({username: this.username, password: this.password})
-            this.$router.push('/library/')
+            await this.setUserInUser()
+            if (this.getUser.role == 'ADMIN'){
+                this.$router.push('/admin/')
+            }
+            else {
+                this.$router.push('/library/')
+            }
         }
     }
 }

@@ -11,10 +11,10 @@
                     </div>
                     <div class="w-5/6 flex flex-col gap-1 p-5">
                         <div class="text-6xl">
-                            {{ user.firstName }} {{ user.lastName }}
+                            {{ getUser.firstName }} {{ getUser.lastName }}
                         </div>
                         <div class="text-4xl">
-                            #{{ user.username }}
+                            #{{ getUser.username }}
                         </div>
                     </div>
                 </div>
@@ -56,21 +56,15 @@ export default{
         return{
             show: false,
             showModal: false,
-            activeBook: null,
-            user: {
-                id: 1,
-                username: "user1", 
-                firstName: "Иван", 
-                lastName: "Иванов", 
-                role: "Admin"
-            }
+            activeBook: null
         }
     },
     mounted() {
         this.show = true;
+        this.setUsersBookInList();
     },
     computed: {
-        ...mapGetters(['getUsersBooks'])
+        ...mapGetters(['getUsersBooks', 'getUser'])
     },
     methods: {
         ...mapActions(['setUsersBookInList','returnUsersBookInList', 'addUsersBook']),

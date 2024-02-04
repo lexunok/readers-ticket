@@ -39,10 +39,17 @@
                     <div v-else>Пароль {{ activeUser.password }}</div>
                 </div>
                 <div class="w-full">
-                    <TitleInput v-if="redactorActive" :model="newUser.role" :getModel='fSetData' property="role" title="Роль" 
-                                classStyle="w-full flex" titleStyle="w-[8%] mr-2" 
-                                inputStyle="w-[25%] rounded border border-slate-300 placeholder-slate-400 px-2
-                                            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" />
+                    <div v-if="redactorActive" class="flex items-center gap-1">
+                        <div>Роль</div>
+                        <div>
+                            <input type="radio" id="reader" value="READER" v-model="newUser.role">
+                            <label for="reader">Читатель</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="admin" value="ADMIN" v-model="newUser.role">
+                            <label for="admin">Админ</label>
+                        </div>
+                    </div>
                     <div v-else class="flex items-center gap-1" >
                         <div>Роль</div>
                         <div class="flex bg-amber-500 w-auto p-[5px] rounded">{{ activeUser.role }}</div>
@@ -78,7 +85,7 @@
             document.removeEventListener('keyup', this.escFunction);
         },
         methods: {
-            ...mapActions(['setUsersInList','addUser', 'deleteUserInList']),
+            ...mapActions(['setUsersInList','addUser', 'deleteUserInList','updateExistUser']),
             escFunction(event) {
                 if(event.keyCode === 27) {
                     this.closeModal();
@@ -94,7 +101,7 @@
                 this.closeRedactor();
             },
             async fCloseRedactorAndSafe(id){
-                await this.addUser({username: this.newUser.username, firstName: this.newUser.firstName, 
+                await this.updateExistUser({id: this.newUser.id, username: this.newUser.username, firstName: this.newUser.firstName, 
                     lastName: this.newUser.lastName, role: this.newUser.role, password: this.newUser.password})
                 await this.setUsersInList()
                 this.closeRedactorAndSafe(id);

@@ -2,16 +2,28 @@ import {http} from "../plugins/axios";
 
 export default {
     actions: {
-        async setUsersBookInList({commit}){
-            const response = await http.get("/api/v1/book/user/all")
+        async setUsersBookInList({commit,rootState}){
+            const response = await http.get("/api/v1/book/user/all",{
+                headers: {
+                    'Authorization': `Bearer ${rootState.users.token}`
+                }
+            })
             commit('setUsersBooks',response.data)
         },
-        async addUsersBook({commit}, bookId){
-            const response = await http.post("/api/v1/book/rent/" + bookId)
+        async addUsersBook({commit,rootState}, bookId){
+            const response = await http.post("/api/v1/book/rent/" + bookId,{
+                headers: {
+                    'Authorization': `Bearer ${rootState.users.token}`
+                }
+            })
             commit('updateUsersBooks',response.data)
         },
-        async returnUsersBookInList({ commit }, bookId) {
-            const response = await http.put("/api/v1/book/return/" + bookId)
+        async returnUsersBookInList({ commit,rootState }, bookId) {
+            const response = await http.put("/api/v1/book/return/" + bookId,{
+                headers: {
+                    'Authorization': `Bearer ${rootState.users.token}`
+                }
+            })
             commit('returnUsersBook',response.data)
         }
     },

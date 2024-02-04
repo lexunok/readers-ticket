@@ -27,12 +27,13 @@ export default{
     },
     mounted() {
         this.show = true;
+        this.setBookInList();
     },
     computed: {
         ...mapGetters(['getBooks'])
     },
     methods: {
-        ...mapActions(['setUsersBookInList','returnUsersBookInList', 'addUsersBook']),
+        ...mapActions(['setUsersBookInList','returnUsersBookInList', 'addUsersBook', 'setBookInList']),
         openModal(book) {
             this.activeBook = book;
             this.showModal = true;

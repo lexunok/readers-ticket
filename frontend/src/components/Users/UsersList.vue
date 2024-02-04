@@ -11,7 +11,10 @@
                 <button type="button" @click="startModal(user)" class="transition duration-300 ease-in-out h-full w-full shadow-lg bg-white rounded-xl py-4 px-5 
                                                             hover:bg-gray-200 hover:shadow-md focus:outline-none">
                     <div class="flex flex-col gap-1">
-                        <div class="flex h-[20%] text-2xl">
+                        <div v-if="user.firstname == null && user.lastName == null" class="flex h-[20%] text-2xl">
+                            #{{ user.username }}
+                        </div>
+                        <div v-else class="flex h-[20%] text-2xl">
                             {{ user.firstName }} {{ user.lastName }}, #{{ user.username }}
                         </div>
                         <div class="flex">Пароль {{ user.password }}</div>
