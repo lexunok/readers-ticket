@@ -3,7 +3,11 @@ import {http} from "../plugins/axios";
 export default {
     actions: {
         async userLogin({commit}, {username, password}){
-            const response = await http.post("/api/v1/auth/login", {username, password})
+            const response = await http.post("/api/v1/auth/login", {}, {
+                auth: {
+                    username, password
+                }
+            })
             commit('setUser',response.data)
         },
         async setUsersInList({commit}){
