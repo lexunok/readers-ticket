@@ -2,17 +2,18 @@
     <div class="w-screen h-screen bg-orange-200">
         <AdminNav/>
         <transition name="fade" enter-active-class="enter-active">
-            <UsersList v-if="show" :users="users" :openModal="openModal"/>
+            <UsersList v-if="show" :users="getUsers" :openModal="openModal" :userAdder="userAdder"/>
         </transition>
     </div>
     <transition name="modal" enter-active-class="enter-active" leave-active-class="leave-active">
         <UsersModal v-if="showModal" :newUser="newUser" :activeUser="activeUser" :redactorActive="redactorActive" 
-                        :closeModal="closeModal" :openRedactor="openRedactor" :closeRedactor="closeRedactor"
+                        :closeModal="closeModal" :openRedactor="openRedactor" :closeRedactor="closeRedactor" :newUserBool="newUserBool"
                         :closeRedactorAndSafe="closeRedactorAndSafe" :deleteUser="deleteUser" :setData="setData"/>
     </transition>
 </template>
 <script>
-    import AdminNav from "../../components/AdminNav.vue"
+    import { mapGetters } from 'vuex';
+    import AdminNav from "../../components/Navigation/AdminNav.vue"
     import UsersList from "../../components/Users/UsersList.vue"
     import UsersModal from "../../components/Users/UsersModal.vue"
     export default{
@@ -23,55 +24,31 @@
             return {
                 show: false,
                 showModal: false,
+                newUserBool: false,
                 redactorActive: false,
-                activeUser: null,
-                newUser: null,
-                users: [
-                    { 
-                        id: 1, 
-                        username: "user1", 
-                        firstName: "Иван", 
-                        lastName: "Иванов", 
-                        role: "Admin", 
-                        password: "password123"
-                    }, 
-                    { 
-                        id: 2, 
-                        username: "user2", 
-                        firstName: "Петр", 
-                        lastName: "Петров", 
-                        role: "User", 
-                        password: "password456"
-                    }, 
-                    { 
-                        id: 3, 
-                        username: "user3", 
-                        firstName: "Сергей", 
-                        lastName: "Сергеев", 
-                        role: "User", 
-                        password: "password789"
-                    }, 
-                    { 
-                        id: 4, 
-                        username: "user4", 
-                        firstName: "Дмитрий", 
-                        lastName: "Дмитриев", 
-                        role: "Moderator", 
-                        password: "password321"
-                    }, 
-                    { 
-                        id: 5, 
-                        username: "user5", 
-                        firstName: "Алексей", 
-                        lastName: "Алексеев", 
-                        role: "Guest", 
-                        password: "password654"
-                    }
-                ]
+                activeUser: {
+                    id: '',
+                    username: '',
+                    firstName: '',
+                    lastname: '',
+                    role: '',
+                    password: ''
+                },
+                newUser: {
+                    id: '',
+                    username: '',
+                    firstName: '',
+                    lastname: '',
+                    role: '',
+                    password: ''
+                }
             }
         },
         mounted() {
             this.show = true;
+        },
+        computed: {
+            ...mapGetters(['getUsers'])
         },
         methods:{
             openModal(user) {
@@ -80,7 +57,14 @@
             },
             closeModal() {
                 this.redactorActive = false;
-                this.activeUser = null;
+                this.activeUser = {
+                    id: '',
+                    username: '',
+                    firstName: '',
+                    lastname: '',
+                    role: '',
+                    password: ''
+                };
                 this.showModal = false;
             },
             openRedactor(){
@@ -88,27 +72,31 @@
                 this.redactorActive = true;
             },
             closeRedactor(){
-                this.newUser = null;
+                this.newUser = {
+                    id: '',
+                    username: '',
+                    firstName: '',
+                    lastname: '',
+                    role: '',
+                    password: ''
+                };
                 this.redactorActive = false;
             },
-            closeRedactorAndSafe(id){
-                this.newUser.id = id;
-                for (let i = 0; i < this.users.length; i++) {
-                    if (this.users[i].id === id) {
-                        this.users[i] = Object.assign({}, this.newUser);;
-                        break;
-                    }
-                }
+            closeRedactorAndSafe(){
                 this.activeUser = Object.assign({}, this.newUser);
                 this.redactorActive = false;
             },
-            deleteUser(id){
-                this.users = this.users.filter(element => element.id !== id)
+            deleteUser(){
                 this.showModal = false;
             },
             setData(property, data){
                 this.newUser[property] = data;
-            }
+            },
+            userAdder(){
+                this.newUserBool = true;
+                this.redactorActive = true;
+                this.showModal = true;
+            },
         }
     }
     // private Long id;

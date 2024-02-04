@@ -50,8 +50,10 @@
                 </div>
             </div>
             <div v-if="redactorActive" class="w-full flex gap-2">
-                <button type="button" @click="fCloseRedactorAndSafe(activeUser.id)" class="bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить изменения</button>
-                <button type="button" @click="fCloseRedactor" class="bg-red-500 p-2 rounded-lg">Закрыть редактор</button>
+                <button v-if="newUserBool" type="button" @click="fAddUser()" class="bg-green-500 p-2 rounded-lg active:bg-green-600">Добавить пользователя</button>
+                <button v-else type="button" @click="fCloseRedactorAndSafe(activeUser.id)" class="bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить изменения</button>
+                <button v-if="newUserBool" type="button" @click="fCloseModal" class="bg-red-500 p-2 rounded-lg">Закрыть редактор</button>
+                <button v-else type="button" @click="fCloseRedactor" class="bg-red-500 p-2 rounded-lg">Закрыть редактор</button>
             </div>
             <div v-else class="w-full flex gap-2">
                 <button type="button" @click="fOpenRedactor" class="bg-green-500 p-2 rounded-lg active:bg-green-600">Редактировать пользователя</button>
@@ -61,12 +63,14 @@
     </div>
 </template>
 <script>
+    import { mapActions } from 'vuex';
     import TitleInput from "../../components/TitleInput.vue"
     export default {
         components: {
             TitleInput
         },
-        props: ['closeModal', 'openRedactor', 'closeRedactor', 'closeRedactorAndSafe', 'deleteUser', 'setData', 'newUser', 'activeUser', 'redactorActive'],
+        props: ['closeModal', 'openRedactor', 'closeRedactor', 'closeRedactorAndSafe', 'deleteUser', 
+                'setData', 'newUser', 'activeUser', 'redactorActive', 'newUserBool'],
         mounted() {
             document.addEventListener('keyup', this.escFunction);
         },
@@ -74,6 +78,7 @@
             document.removeEventListener('keyup', this.escFunction);
         },
         methods: {
+            ...mapActions(['setUsersInList','addUser', 'deleteUserInList']),
             escFunction(event) {
                 if(event.keyCode === 27) {
                     this.closeModal();
@@ -88,11 +93,21 @@
             fCloseRedactor(){
                 this.closeRedactor();
             },
-            fCloseRedactorAndSafe(id){
+            async fCloseRedactorAndSafe(id){
+                await this.addUser({username: this.newUser.username, firstName: this.newUser.firstName, 
+                    lastName: this.newUser.lastName, role: this.newUser.role, password: this.newUser.password})
+                await this.setUsersInList()
                 this.closeRedactorAndSafe(id);
             },
-            fDeleteUser(id){
-                this.deleteUser(id);
+            async fDeleteUser(id){
+                await this.deleteUserInList(id)
+                await this.setUsersInList()
+                this.deleteUser();
+            },
+            async fAddUser(){
+                await this.addUser({username: this.newUser.username, firstName: this.newUser.firstName, 
+                    lastName: this.newUser.lastName, role: this.newUser.role, password: this.newUser.password})
+                await this.setUsersInList()
             },
             fSetData(property, data){
                 this.setData(property, data);

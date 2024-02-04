@@ -1,7 +1,12 @@
 <template>
     <div class="h-[92%] w-full flex flex-col items-center">
-        <Title title="Список литературы" />
+        <Title :title="title" />
         <ul class="h-[92%] w-[90%] overflow-y-auto">
+            <li v-if="admin" class="h-auto m-2 w-[99%]">
+                <button type="button" @click="startBookAdder" 
+                        class="transition duration-300 ease-in-out h-full w-full flex justify-center items-center shadow-lg bg-white text-2xl rounded-xl py-4 px-5 
+                                hover:bg-gray-200 hover:shadow-md focus:outline-none">Добавить книгу</button>
+            </li>
             <li v-for="book in books" :key="book.id" class="h-auto inline-block w-[49%] m-2">
                 <button type="button" @click="startModal(book)" class="transition duration-300 ease-in-out h-full w-full shadow-lg bg-white rounded-xl py-4 px-5 
                                                                     hover:bg-gray-200 hover:shadow-md focus:outline-none">
@@ -31,7 +36,7 @@
         components: { 
             GenresAuthors, Title
         },
-        props: ['books', 'openModal'],
+        props: ['books', 'openModal', 'title', 'admin', 'bookAdder'],
         data(){
             return{
                 
@@ -40,6 +45,9 @@
         methods: {
             startModal(book){
                 this.openModal(book);
+            },
+            startBookAdder(){
+                this.bookAdder();
             }
         }
     }
