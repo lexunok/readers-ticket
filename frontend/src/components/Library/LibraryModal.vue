@@ -9,81 +9,81 @@
                 </button>
             </div>
             <div class="flex flex-row gap-1 h-full">
-                <div class="w-3/4 flex flex-col gap-2 h-full">
+                <div class="w-[70%] flex flex-col gap-2 h-full">
                     <div class="w-full">
                         <input type="text" 
                                 v-if="redactorActive"
                                 v-model="newBook.name" 
-                                class="w-full rounded text-2xl border border-slate-300 placeholder-slate-400 px-2 
+                                class="w-full rounded border border-slate-300 placeholder-slate-400 px-2 2xl:text-2xl xl:text-xl lg:text-lg
                                         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" />
-                        <div v-else class="text-2xl w-full">{{ activeBook.name }}</div>
+                        <div v-else class="2xl:text-2xl xl:text-xl lg:text-lg w-full">{{ activeBook.name }}</div>
                     </div>
                     <div class="w-full">
                         <TitleInput v-if="redactorActive" :model="newBook.countOfPages" :getModel='fSetData' property="countOfPages" title="Количество страниц" 
-                                    classStyle="w-full flex" titleStyle="w-[25%]" 
-                                    inputStyle="w-[15%] rounded border border-slate-300 placeholder-slate-400 px-2 
+                                    classStyle="w-full flex" titleStyle="w-[25%] 2xl:text-base xl:text-sm lg:text-xs" 
+                                    inputStyle="w-[15%] rounded border border-slate-300 placeholder-slate-400 px-2 2xl:text-base xl:text-sm lg:text-xs
                                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" />
-                        <div v-else class="w-full">Количество страниц {{ activeBook.countOfPages }}</div>
+                        <div v-else class="w-full 2xl:text-base xl:text-sm lg:text-xs">Количество страниц {{ activeBook.countOfPages }}</div>
                     </div>
                     <div class="w-full h-full">
                         <TitleInput v-if="redactorActive" :model="newBook.description" :getModel='fSetData' property="description" title="О книге:" 
-                                    classStyle="h-full" titleStyle="" textarea="true"
-                                    inputStyle="w-full h-[45%] resize-none rounded border border-slate-300 placeholder-slate-400 px-2 
+                                    classStyle="h-full" titleStyle="2xl:text-base xl:text-sm lg:text-xs" textarea="true"
+                                    inputStyle="w-full h-[45%] resize-none rounded border border-slate-300 placeholder-slate-400 px-2 2xl:text-base xl:text-sm lg:text-xs
                                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" />
-                        <div v-else class="overflow-auto">О книге:<br>{{ activeBook.description }}</div>
+                        <div v-else class="overflow-auto 2xl:text-base xl:text-sm lg:text-xs">О книге:<br>{{ activeBook.description }}</div>
                     </div>
                     <div class="w-full">
                         <div v-if="redactorActive" class="w-full flex">
-                            <div class="w-[10%]">Жанры</div> 
+                            <div class="w-[10%] 2xl:text-base xl:text-sm lg:text-xs">Жанры</div> 
                             <input type="text" 
                                     v-model="genres"
                                     @input="convertToGenres"
-                                    class="w-[90%] rounded border border-slate-300 placeholder-slate-400 px-2
+                                    class="w-[90%] rounded border border-slate-300 placeholder-slate-400 px-2 2xl:text-base xl:text-sm lg:text-xs
                                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"/>
                         </div>
-                        <GenresAuthors v-else IfTitle="Жанры" ElseTitle="Жанр" :list="activeBook.genres" classStyle="bg-green-500 w-auto p-[5px] rounded" />
+                        <GenresAuthors v-else IfTitle="Жанры" ElseTitle="Жанр" :list="activeBook.genres" classStyle="bg-green-500 w-auto p-[5px] rounded 2xl:text-base xl:text-sm lg:text-xs" />
                     </div>
                     <div class="w-full">
                         <div v-if="redactorActive" class="w-full flex">
-                            <div class="w-[10%]">Авторы</div> 
+                            <div class="w-[10%] 2xl:text-base xl:text-sm lg:text-xs">Авторы</div> 
                             <input type="text" 
                                     v-model="authors"
                                     @input="convertToAuthors"
-                                    class="w-[90%] rounded border border-slate-300 placeholder-slate-400 px-2
+                                    class="w-[90%] rounded border border-slate-300 placeholder-slate-400 px-2 2xl:text-base xl:text-sm lg:text-xs
                                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"/>
                         </div>
-                        <GenresAuthors v-else IfTitle="Авторы" ElseTitle="Автор" :list="activeBook.authors" classStyle="bg-blue-500 w-auto p-[5px] rounded" />
+                        <GenresAuthors v-else IfTitle="Авторы" ElseTitle="Автор" :list="activeBook.authors" classStyle="bg-blue-500 w-auto p-[5px] rounded 2xl:text-base xl:text-sm lg:text-xs" />
                     </div>
                     <div class="w-full">
-                        <TitleInput v-if="redactorActive" @input="convertToAuthors" :model="newBook.isbn" :getModel='fSetData' property="isbn" title="ISBN" 
+                        <TitleInput v-if="redactorActive" :model="newBook.isbn" :getModel='fSetData' property="isbn" title="ISBN" 
                                     classStyle="w-full flex text-xs" titleStyle="w-[5%]" 
                                     inputStyle="w-[25%] rounded border border-slate-300 placeholder-slate-400 px-2
                                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" />
                         <div v-else class="text-xs">ISBN {{ activeBook.isbn }}</div>
                     </div>
                 </div>
-                <div class="w-1/4 flex flex-col gap-2">
+                <div class="w-[30%] flex flex-col gap-2">
                     <BookRedactorRight title="Издатель" :redactive="redactorActive" :ElseTitle="activeBook.publisher" :getModel='fSetData' property="publisher" />
                     <BookRedactorRight title="Год издания" :redactive="redactorActive" :ElseTitle="activeBook.yearOfPublishing" :getModel='fSetData' property="yearOfPublishing" />
                 </div>
             </div>
             <div v-if="admin" class="w-full">
                 <div v-if="redactorActive" class="w-full flex gap-2">
-                    <button v-if="newBookBool" type="button" @click="fAddBook" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить книгу</button>
-                    <button v-else type="button" @click="fCloseRedactorAndSafe" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Сохранить изменения</button>
-                    <button v-if="newBookBool" type="button" @click="fCloseModal" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Закрыть редактор</button>
-                    <button v-else type="button" @click="fCloseRedactor" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Закрыть редактор</button>
+                    <button v-if="newBookBool" type="button" @click="fAddBook" class="library-modal-green">Сохранить книгу</button>
+                    <button v-else type="button" @click="fCloseRedactorAndSafe" class="library-modal-green">Сохранить изменения</button>
+                    <button v-if="newBookBool" type="button" @click="fCloseModal" class="library-modal-red">Закрыть редактор</button>
+                    <button v-else type="button" @click="fCloseRedactor" class="library-modal-red">Закрыть редактор</button>
                 </div>
                 <div v-else class="w-full flex gap-2">
-                    <button type="button" @click="fOpenRedactor" class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Редактировать книгу</button>
-                    <button type="button" @click="fDeleteBook(activeBook.id)" class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Удалить книгу</button>
+                    <button type="button" @click="fOpenRedactor" class="library-modal-green">Редактировать книгу</button>
+                    <button type="button" @click="fDeleteBook(activeBook.id)" class="library-modal-red">Удалить книгу</button>
                 </div>
             </div>
             <div v-else class="w-full">
                 <button type="button" v-if="profile != null && activeUserBook.isRent == true" @click="fReturnUsersBook(activeUserBook.id)" 
-                        class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Убрать книгу из читательского билета</button>
+                        class="library-modal-red">Убрать книгу из читательского билета</button>
                 <button type="button" v-if="profile == null && isBookInList(activeBook) == false" @click="fAddUsersBook(activeBook.id)" 
-                        class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Добавить книгу в читательский билет</button>
+                        class="library-modal-green">Добавить книгу в читательский билет</button>
             </div>
         </div>
     </div>
@@ -109,11 +109,11 @@ export default {
         document.addEventListener('keyup', this.escFunction);
         if (Array.isArray(this.activeBook.genres))
         {
-            this.genres = this.activeBook.genres.join(' ');
+            this.genres = this.activeBook.genres.join(', ');
         }
         if (Array.isArray(this.activeBook.authors))
         {
-            this.authors = this.activeBook.authors.join(' ');
+            this.authors = this.activeBook.authors.join(', ');
         }
     },
     beforeDestroy() {
@@ -131,10 +131,14 @@ export default {
             }
         },
         convertToAuthors(){
-            this.newBook.authors = this.authors.split(' ');
+            this.newBook.authors = this.authors.split(',')
+                .map(author => author.trim())
+                .filter(author => author.length > 0);
         },
         convertToGenres(){
-            this.newBook.genres = this.genres.split(' ');
+            this.newBook.genres = this.genres.split(',')
+                .map(genre => genre.trim())
+                .filter(genre => genre.length > 0);
         },
         fCloseModal(){
             this.closeModal();
@@ -161,6 +165,8 @@ export default {
                     yearOfPublishing: this.newBook.yearOfPublishing, genres: this.newBook.genres, authors: this.newBook.authors, 
                     isbn: this.newBook.isbn, countOfPages: this.newBook.countOfPages})
             await this.setBookInList()
+            this.genres = null;
+            this.authors = null;
             this.bookAdder();
         },
         fSetData(property, data){
@@ -183,6 +189,3 @@ export default {
     }
 }
 </script>
-<style>
-
-</style>

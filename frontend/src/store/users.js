@@ -1,4 +1,5 @@
 import {http} from "../plugins/axios";
+import router from "../router/index";
 
 export default {
     actions: {
@@ -11,44 +12,84 @@ export default {
             commit('setToken',response.data)
         },
         async setUserInUser({commit, state}){
-            const response = await http.get("/api/v1/auth/profile", {
-                headers: {
-                    'Authorization': `Bearer ${state.token}`
+            try {
+                const response = await http.get("/api/v1/auth/profile", {
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                })
+                commit('setUser',response.data)
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
                 }
-            })
-            commit('setUser',response.data)
+            }
         },
         async setUsersInList({commit,state}){
-            const response = await http.get("/api/v1/admin/user/all",{
-                headers: {
-                    'Authorization': `Bearer ${state.token}`
+            try {
+                const response = await http.get("/api/v1/admin/user/all",{
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                })
+                commit('setUsers',response.data)
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
                 }
-            })
-            commit('setUsers',response.data)
+            }
         },
         async addUser({commit,state}, {username, firstName, lastName, role, password}){
-            const response = await http.post("/api/v1/admin/user/register",{username, firstName, lastName, role, password},{
-                headers: {
-                    'Authorization': `Bearer ${state.token}`
+            try {
+                const response = await http.post("/api/v1/admin/user/register",{username, firstName, lastName, role, password},{
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                })
+                commit('updateUsers',response.data)
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
                 }
-            })
-            commit('updateUsers',response.data)
+            }
         },
         async deleteUserInList({ commit,state }, id) {
-            const response = await http.delete("/api/v1/admin/user/delete/" + id,{
-                headers: {
-                    'Authorization': `Bearer ${state.token}`
+            try{
+                const response = await http.delete("/api/v1/admin/user/delete/" + id,{
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                })
+                commit('deleteUser',response.data)
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
                 }
-            })
-            commit('deleteUser',response.data)
+            }
         },
         async updateExistUser({commit,state}, {id, username, firstName, lastName, role, password}){
-            const response = await http.post("/api/v1/admin/user/register",{id, username, firstName, lastName, role, password},{
-                headers: {
-                    'Authorization': `Bearer ${state.token}`
+            try {
+                const response = await http.post("/api/v1/admin/user/register",{id, username, firstName, lastName, role, password},{
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                })
+                commit('updateUser',response.data)
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
                 }
-            })
-            commit('updateUser',response.data)
+            }
         }
     },
     mutations: {

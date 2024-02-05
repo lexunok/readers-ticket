@@ -14,6 +14,3 @@
         props: ['IfTitle','ElseTitle', 'list', 'classStyle']
     }
 </script>
-<style>
-
-</style>

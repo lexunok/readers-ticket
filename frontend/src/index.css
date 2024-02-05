@@ -1,3 +1,70 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.modal-enter-active {
+    animation: modal-in 0.3s ease-in;
+}
+.modal-leave-active {
+animation: modal-out 0.3s ease-out;
+}
+@keyframes modal-in {
+0% {
+    opacity: 0;
+}
+100% {
+    opacity: 1;
+}
+}
+@keyframes modal-out {
+0% {
+    opacity: 1;
+}
+100% {
+    opacity: 0;
+}
+}
+.fade-enter-active {
+animation: fade-in 0.2s ease-in;
+}
+@keyframes fade-in {
+0% {
+    opacity: 0;
+}
+100% {
+    opacity: 1;
+}
+}
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+.background{
+    @apply w-screen h-screen bg-orange-200 font-sans;
+}
+.nav-class{
+    @apply w-[100%] h-[8%] bg-white flex justify-center shadow-lg select-none;
+}
+.nav-under-class{
+    @apply w-[80%] h-[100%] flex items-center;
+}
+.nav-button {
+    @apply transition duration-300 ease-in-out w-1/3 h-[80%] flex justify-center items-center mx-2 hover:bg-gray-200 active:bg-gray-300 rounded-lg 2xl:text-xl xl:text-lg lg:text-base
+}
+.main-button {
+    @apply transition duration-300 ease-in-out w-[80%] h-3/4 bg-white rounded-xl flex flex-col justify-center items-center gap-4 hover:bg-gray-200 active:bg-gray-300
+}
+.library-modal-green{
+    @apply transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg hover:bg-[#20BA59] active:bg-[#1EB054] 2xl:text-base xl:text-sm lg:text-xs;
+}
+.library-modal-red{
+    @apply transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg hover:bg-[#E64040] active:bg-[#DB3D3D] 2xl:text-base xl:text-sm lg:text-xs;
+}

@@ -1,14 +1,14 @@
 <template>
-    <div class="w-screen h-screen bg-orange-200">
+    <div class="background">
         <AdminNav/>
-        <transition name="fade" enter-active-class="enter-active">
+        <transition name="fade" enter-active-class="fade-enter-active">
             <UsersList v-if="show" :users="getUsers" :openModal="openModal" :userAdder="userAdder"/>
         </transition>
     </div>
-    <transition name="modal" enter-active-class="enter-active" leave-active-class="leave-active">
+    <transition name="modal" enter-active-class="modal-enter-active" leave-active-class="modal-leave-active">
         <UsersModal v-if="showModal" :newUser="newUser" :activeUser="activeUser" :redactorActive="redactorActive" 
                         :closeModal="closeModal" :openRedactor="openRedactor" :closeRedactor="closeRedactor" :newUserBool="newUserBool"
-                        :closeRedactorAndSafe="closeRedactorAndSafe" :deleteUser="deleteUser" :setData="setData"/>
+                        :closeRedactorAndSafe="closeRedactorAndSafe" :deleteUser="deleteUser" :setData="setData" :addderUser="addUser"/>
     </transition>
 </template>
 <script>
@@ -58,7 +58,6 @@
                 this.showModal = true;
             },
             closeModal() {
-                this.redactorActive = false;
                 this.activeUser = {
                     id: '',
                     username: '',
@@ -67,13 +66,25 @@
                     role: '',
                     password: ''
                 };
+                this.redactorActive = false;
+                this.newUserBool = false;
                 this.showModal = false;
             },
             openRedactor(){
                 this.newUser = Object.assign({}, this.activeUser);
+                this.newUser.password = null;
                 this.redactorActive = true;
             },
             closeRedactor(){
+                this.newUserBool = false;
+                this.redactorActive = false;
+            },
+            closeRedactorAndSafe(){
+                this.activeUser = Object.assign({}, this.newUser);
+                this.newUserBool = false;
+                this.redactorActive = false;
+            },
+            addUser(){
                 this.newUser = {
                     id: '',
                     username: '',
@@ -82,13 +93,21 @@
                     role: '',
                     password: ''
                 };
+                this.newUserBool = false;
                 this.redactorActive = false;
-            },
-            closeRedactorAndSafe(){
-                this.activeUser = Object.assign({}, this.newUser);
-                this.redactorActive = false;
+                this.showModal = false;
             },
             deleteUser(){
+                this.newUser = {
+                    id: '',
+                    username: '',
+                    firstName: '',
+                    lastname: '',
+                    role: '',
+                    password: ''
+                };
+                this.newUserBool = false;
+                this.redactorActive = false;
                 this.showModal = false;
             },
             setData(property, data){
@@ -101,57 +120,4 @@
             },
         }
     }
-    // private Long id;
-    // private String username;
-    // private String firstName;
-    // private String lastName;
-    // private User.Role role;
-    // private String password;
 </script>
-<style>
-.enter-active {
-  animation: modal-in 0.3s ease-in;
-}
-.leave-active {
-  animation: modal-out 0.3s ease-out;
-}
-@keyframes modal-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes modal-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.enter-active {
-  animation: fade-in 0.2s ease-in;
-}
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: #FFFFFF;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 5px;
-}
-</style>

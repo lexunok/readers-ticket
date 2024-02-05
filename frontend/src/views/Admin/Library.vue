@@ -1,11 +1,11 @@
 <template>
-    <div class="w-screen h-screen bg-orange-200">
+    <div class="background">
         <AdminNav/>
-        <transition name="fade" enter-active-class="enter-active">
+        <transition name="fade" enter-active-class="fade-enter-active">
             <LibraryList v-if="show" title="Список литературы" :openModal="openModal" :books="getBooks" :admin="true" :bookAdder="bookAdder"/>
         </transition>
     </div>
-    <transition name="modal" enter-active-class="enter-active" leave-active-class="leave-active">
+    <transition name="modal" enter-active-class="modal-enter-active" leave-active-class="modal-leave-active">
         <LibraryModal v-if="showModal" :admin="true" :newBook="newBook" :activeBook="activeBook" :redactorActive="redactorActive"
                         :closeModal="closeModal" :openRedactor="openRedactor" :closeRedactor="closeRedactor" :newBookBool="newBookBool"
                         :closeRedactorAndSafe="closeRedactorAndSafe" :deleteBook="deleteBook" :setData="setData" :bookAdder="addBook"/>
@@ -58,31 +58,12 @@
             ...mapGetters(['getBooks'])
         },
         methods: {
-            ...mapActions(['setBookInList','deleteBookInList', 'addBook', 'updateBook']),
+            ...mapActions(['setBookInList','deleteBookInList', 'updateBook']),
             openModal(book) {
                 this.activeBook = book;
                 this.showModal = true;
             },
             closeModal() {
-                this.redactorActive = false;
-                this.activeBook = { 
-                    id: '', 
-                    name: '', 
-                    description: '', 
-                    publisher: '', 
-                    yearOfPublishing: '', 
-                    genres: [''], 
-                    authors: [''], 
-                    isbn: '', 
-                    countOfPages: '' 
-                };
-                this.showModal = false;
-            },
-            openRedactor(){
-                this.newBook = Object.assign({}, this.activeBook);
-                this.redactorActive = true;
-            },
-            closeRedactor(){
                 this.newBook = { 
                     id: '', 
                     name: '', 
@@ -94,7 +75,28 @@
                     isbn: '', 
                     countOfPages: '' 
                 };
+                this.activeBook = { 
+                    id: '', 
+                    name: '', 
+                    description: '', 
+                    publisher: '', 
+                    yearOfPublishing: '', 
+                    genres: [''], 
+                    authors: [''], 
+                    isbn: '', 
+                    countOfPages: '' 
+                };
+                this.newBookBool = false;
                 this.redactorActive = false;
+                this.showModal = false;
+            },
+            openRedactor(){
+                this.newBook = Object.assign({}, this.activeBook);
+                this.redactorActive = true;
+            },
+            closeRedactor(){
+                this.redactorActive = false;
+                this.newBookBool = false;
             },
             bookAdder(){
                 this.newBookBool = true;
@@ -103,13 +105,61 @@
             },
             closeRedactorAndSafe(){
                 this.activeBook = Object.assign({}, this.newBook);
+                this.newBookBool = false;
                 this.redactorActive = false;
             },
             addBook(){
-                this.activeBook = Object.assign({}, this.newBook);
+                this.newBook = { 
+                    id: '', 
+                    name: '', 
+                    description: '', 
+                    publisher: '', 
+                    yearOfPublishing: '', 
+                    genres: '', 
+                    authors: '', 
+                    isbn: '', 
+                    countOfPages: '' 
+                };
+                this.activeBook = { 
+                    id: '', 
+                    name: '', 
+                    description: '', 
+                    publisher: '', 
+                    yearOfPublishing: '', 
+                    genres: [''], 
+                    authors: [''], 
+                    isbn: '', 
+                    countOfPages: '' 
+                };
+                this.newBookBool = false;
                 this.redactorActive = false;
+                this.showModal = false;
             },
             deleteBook(){
+                this.newBook = { 
+                    id: '', 
+                    name: '', 
+                    description: '', 
+                    publisher: '', 
+                    yearOfPublishing: '', 
+                    genres: '', 
+                    authors: '', 
+                    isbn: '', 
+                    countOfPages: '' 
+                };
+                this.activeBook = { 
+                    id: '', 
+                    name: '', 
+                    description: '', 
+                    publisher: '', 
+                    yearOfPublishing: '', 
+                    genres: [''], 
+                    authors: [''], 
+                    isbn: '', 
+                    countOfPages: '' 
+                };
+                this.newBookBool = false;
+                this.redactorActive = false;
                 this.showModal = false;
             },
             setData(property, data){
@@ -118,52 +168,3 @@
         }
     }
 </script>
-<style>
-.enter-active {
-  animation: modal-in 0.3s ease-in;
-}
-.leave-active {
-  animation: modal-out 0.3s ease-out;
-}
-@keyframes modal-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes modal-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.enter-active {
-  animation: fade-in 0.2s ease-in;
-}
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: #FFFFFF;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 5px;
-}
-
-</style>
