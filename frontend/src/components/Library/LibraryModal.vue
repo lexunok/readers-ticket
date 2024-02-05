@@ -80,10 +80,10 @@
                 </div>
             </div>
             <div v-else class="w-full">
-                <button type="button" v-if="isBookInList(activeBook)" @click="fReturnUsersBook(activeBook.id)" 
-                class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Убрать книгу из читательского билета</button>
-                <button type="button" v-else @click="fAddUsersBook(activeBook.id)" 
-                class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Добавить книгу в читательский билет</button>
+                <button type="button" v-if="profile != null && activeUserBook.isRent == true" @click="fReturnUsersBook(activeUserBook.id)" 
+                        class="transition ease-in-out duration-300 bg-red-500 p-2 rounded-lg active:bg-red-600">Убрать книгу из читательского билета</button>
+                <button type="button" v-if="profile == null && isBookInList(activeBook) == false" @click="fAddUsersBook(activeBook.id)" 
+                        class="transition ease-in-out duration-300 bg-green-500 p-2 rounded-lg active:bg-green-600">Добавить книгу в читательский билет</button>
             </div>
         </div>
     </div>
@@ -97,7 +97,7 @@ export default {
     components: {
         TitleInput, BookRedactorRight, GenresAuthors
     },
-    props: ['admin', 'closeModal', 'openRedactor', 'closeRedactor', 'closeRedactorAndSafe', 'deleteBook', 
+    props: ['admin', 'closeModal', 'openRedactor', 'closeRedactor', 'closeRedactorAndSafe', 'deleteBook', 'profile', 'activeUserBook',
             'setData', 'newBook', 'activeBook', 'redactorActive', 'returnUsersBook', 'bookAdder', 'newBookBool'],
     data(){
         return{
@@ -178,6 +178,7 @@ export default {
         async fReturnUsersBook(id){
             await this.returnUsersBookInList(id)
             await this.setUsersBookInList()
+            this.closeModal();
         }
     }
 }

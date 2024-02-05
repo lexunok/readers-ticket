@@ -27,7 +27,7 @@
                     </div>
                     <ul class="h-[92%] w-[90%] overflow-y-auto divide-y divide-solid">
                         <li v-for="userBook in getUsersBooks" :key="userBook.id">
-                            <button type="button" @click="openModal(userBook.book)" class="transition duration-300 ease-in-out flex flex-row w-full items-center hover:bg-gray-300 py-3">
+                            <button type="button" @click="openModal(userBook)" class="transition duration-300 ease-in-out flex flex-row w-full items-center hover:bg-gray-300 py-3">
                                 <div class="table-li">{{ userBook.book.name }}</div>
                                 <div v-if="userBook.isRent" class="table-li">Взята</div>
                                 <div v-else class="table-li">Отдана</div>
@@ -41,7 +41,7 @@
         </transition>
     </div>
     <transition name="modal" enter-active-class="enter-active" leave-active-class="leave-active">
-        <LibraryModal v-if="showModal" :activeBook="activeBook" :closeModal="closeModal" />
+        <LibraryModal v-if="showModal" :activeUserBook="activeUserBook" :activeBook="activeUserBook.book" :closeModal="closeModal" profile="profile" />
     </transition>
 </template>
 <script>
@@ -56,7 +56,7 @@ export default{
         return{
             show: false,
             showModal: false,
-            activeBook: null
+            activeUserBook: null
         }
     },
     mounted() {
@@ -81,12 +81,12 @@ export default{
             const date = day + '.' + month + '.' + year
             return date
         },
-        openModal(book) {
-            this.activeBook = book;
+        openModal(userBook) {
+            this.activeUserBook = userBook;
             this.showModal = true;
         },
         closeModal() {
-            this.activeBook = null;
+            this.activeUserBook = null;
             this.showModal = false;
         },
 

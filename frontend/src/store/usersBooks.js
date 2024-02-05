@@ -11,7 +11,7 @@ export default {
             commit('setUsersBooks',response.data)
         },
         async addUsersBook({commit,rootState}, bookId){
-            const response = await http.post("/api/v1/book/rent/" + bookId,{
+            const response = await http.post("/api/v1/book/rent/" + bookId, {},{
                 headers: {
                     'Authorization': `Bearer ${rootState.users.token}`
                 }
@@ -19,7 +19,7 @@ export default {
             commit('updateUsersBooks',response.data)
         },
         async returnUsersBookInList({ commit,rootState }, bookId) {
-            const response = await http.put("/api/v1/book/return/" + bookId,{
+            const response = await http.put("/api/v1/book/return/" + bookId, {},{
                 headers: {
                     'Authorization': `Bearer ${rootState.users.token}`
                 }
