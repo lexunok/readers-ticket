@@ -2,7 +2,7 @@
     <div class="h-[92%] w-full flex flex-col items-center">
         <Title :title="title" />
         <ul class="h-[92%] w-[90%] overflow-y-auto">
-            <li class="h-auto m-2 w-[97%] flex justify-center">
+            <li v-if="admin" class="h-auto m-2 w-[97%] flex justify-center">
                 <button type="button" @click="startBookAdder" 
                         class="transition duration-300 ease-in-out h-full w-[48%] flex justify-center items-center shadow-lg bg-white 2xl:text-2xl xl:text-xl lg:text-lg rounded-xl py-4 px-5 
                                 hover:bg-gray-200 active:bg-gray-300 hover:shadow-md focus:outline-none select-none">Добавить книгу</button>
