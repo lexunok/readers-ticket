@@ -1,34 +1,58 @@
 import {http} from "../plugins/axios";
+import router from "../router/index";
 
 export default {
     actions: {
-        async setUsersBookInList({commit}){
-            const response = await http.get("/api/v1/book/user/all")
-            commit('setUsersBooks',response.data)
+        async setUsersBookInList({commit, rootState}) {
+            try {
+                const response = await http.get("/api/v1/book/user/all", {
+                headers: {
+                    'Authorization': `Bearer ${rootState.users.token}`
+                }
+                });
+                commit('setUsersBooks', response.data);
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
+                }
+            }
         },
-        async addUsersBook({commit}, bookId){
-            const response = await http.post("/api/v1/book/rent/" + bookId)
-            commit('updateUsersBooks',response.data)
+        async addUsersBook({rootState}, bookId){
+            try{
+                await http.post("/api/v1/book/rent/" + bookId, {},{
+                    headers: {
+                        'Authorization': `Bearer ${rootState.users.token}`
+                    }
+                })
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
+                }
+            }
         },
-        async returnUsersBookInList({ commit }, bookId) {
-            const response = await http.put("/api/v1/book/return/" + bookId)
-            commit('returnUsersBook',response.data)
+        async returnUsersBookInList({ rootState }, bookId) {
+            try{
+                await http.put("/api/v1/book/return/" + bookId, {},{
+                    headers: {
+                        'Authorization': `Bearer ${rootState.users.token}`
+                    }
+                })
+            } catch (error){
+                if (error.response && error.response.status === 401) {
+                router.push('/login');
+                } else {
+                    console.error(error);
+                }
+            }
         }
     },
     mutations: {
         setUsersBooks(state, usersBooks) {
             state.usersBooks = usersBooks
-        },
-        updateUsersBooks(state, usersBook){
-            state.usersBooks.push(usersBook)
-        },
-        returnUsersBook(state,usersBook) {
-            for (let i = 0; i < state.usersBooks.length; i++) {
-                if (state.usersBooks[i].id === usersBook.id) {
-                    state.usersBooks[i] = usersBook;
-                    break;
-                }
-            }
         },
     },
     state: {
