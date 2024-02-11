@@ -24,13 +24,14 @@ class AdminUserControllerTest {
 	private TestRestTemplate template;
 
 	@Test
-	void canRegisterGetDeleteUser() {
+	void canEditUsers() {
 		ResponseEntity<String> token = template
 				.withBasicAuth("admin","password")
 				.postForEntity("/api/v1/auth/login", null,String.class);
 		assertNotNull(token.getBody());
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + token.getBody());
+
 		UserDTO user = UserDTO.builder()
 				.role(User.Role.ADMIN)
 				.username("testname")
@@ -38,12 +39,15 @@ class AdminUserControllerTest {
 				.build();
 		template.exchange("/api/v1/admin/user/register", HttpMethod.POST,
 				new HttpEntity<>(user, headers), UserDTO.class);
+
 		ResponseEntity<List<UserDTO>> users = template.exchange("/api/v1/admin/user/all", HttpMethod.GET,
 				new HttpEntity<>(headers), new ParameterizedTypeReference<>(){});
 		UserDTO userInList = users.getBody().stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny().get();
 		assertNotNull(userInList);
+
 		template.exchange("/api/v1/admin/user/delete/" + userInList.getId(), HttpMethod.DELETE,
 				new HttpEntity<>(user, headers), UserDTO.class);
+
 		users = template.exchange("/api/v1/admin/user/all", HttpMethod.GET,
 				new HttpEntity<>(headers), new ParameterizedTypeReference<>(){});
 		assertFalse(users.getBody().stream().anyMatch(u -> u.getUsername().equals(user.getUsername())));

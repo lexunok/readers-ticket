@@ -1,8 +1,6 @@
 package com.coursework.readersticket.models.dto;
 
 import com.coursework.readersticket.models.entity.Book;
-import com.coursework.readersticket.models.entity.User;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

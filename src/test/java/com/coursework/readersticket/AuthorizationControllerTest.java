@@ -32,6 +32,7 @@ class AuthorizationControllerTest {
 		assertNotNull(token.getBody());
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + token.getBody());
+
 		ResponseEntity<UserDTO> profile = template
 				.exchange("/api/v1/auth/profile", HttpMethod.GET,
 						new HttpEntity<>(headers), UserDTO.class);

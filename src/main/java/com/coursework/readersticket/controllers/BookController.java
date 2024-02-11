@@ -2,11 +2,8 @@ package com.coursework.readersticket.controllers;
 
 import com.coursework.readersticket.models.dto.BookDTO;
 import com.coursework.readersticket.models.dto.UsersBookDTO;
-import com.coursework.readersticket.models.entity.User;
-import com.coursework.readersticket.models.entity.UsersBook;
 import com.coursework.readersticket.services.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,7 +17,7 @@ public class BookController {
     private final BookService service;
 
     @GetMapping("/all")
-    public List<BookDTO> addBook() {
+    public List<BookDTO> getAllBooks() {
         return service.getAllBooks();
     }
 
